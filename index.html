@@ -1,11 +1,52 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Status – Blaerr</title>
+    <meta charset="UTF-8" />
+    <title>Status – Blaerr Labs</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #111;
+        color: #fff;
+        text-align: center;
+        padding: 50px;
+      }
+      .status {
+        font-size: 2em;
+        margin: 20px 0;
+      }
+      .online {
+        color: #00ff88;
+      }
+      .offline {
+        color: #ff4444;
+      }
+    </style>
   </head>
   <body>
     <h1>Statusseite von Codu</h1>
-    <p>Server: ✅ Online</p>
-    <p>API: ✅ Online</p>
+    <p>API-Status: <span id="api-status" class="status">⏳ Wird geprüft...</span></p>
+
+    <script>
+      async function checkStatus() {
+        const statusEl = document.getElementById("api-status");
+        try {
+          const res = await fetch("https://codu.blaerr.dev/api/ping", { method: "GET" });
+          if (res.ok) {
+            statusEl.textContent = "✅ Online";
+            statusEl.className = "status online";
+          } else {
+            statusEl.textContent = "⚠️ Fehler";
+            statusEl.className = "status offline";
+          }
+        } catch (err) {
+          statusEl.textContent = "❌ Offline";
+          statusEl.className = "status offline";
+        }
+      }
+
+      checkStatus();
+      setInterval(checkStatus, 30000); // Alle 30 Sekunden prüfen
+    </script>
   </body>
 </html>
