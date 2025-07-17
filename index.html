@@ -1,52 +1,141 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Status – Blaerr Labs</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        background: #111;
-        color: #fff;
-        text-align: center;
-        padding: 50px;
-      }
-      .status {
-        font-size: 2em;
-        margin: 20px 0;
-      }
-      .online {
-        color: #00ff88;
-      }
-      .offline {
-        color: #ff4444;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Statusseite von Codu</h1>
-    <p>API-Status: <span id="api-status" class="status">⏳ Wird geprüft...</span></p>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blaerr Labs – Statusseite</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+  }
+  h1 {
+    margin-bottom: 0.5em;
+  }
+  h2 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    border-bottom: 2px solid #444;
+    padding-bottom: 0.3em;
+  }
+  .service-list {
+    max-width: 600px;
+    margin: 0 auto 2em auto;
+    text-align: left;
+  }
+  .service {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    margin: 10px 0;
+    background: #1e1e1e;
+    border-radius: 8px;
+    align-items: center;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  }
+  .service-name {
+    font-weight: 600;
+    font-size: 1.1em;
+  }
+  .status {
+    font-weight: 700;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 1em;
+    min-width: 90px;
+    text-align: center;
+    color: white;
+  }
+  .online {
+    background-color: #28a745; /* grün */
+    box-shadow: 0 0 8px #28a745aa;
+  }
+  .degraded {
+    background-color: #ffc107; /* gelb */
+    color: #222;
+    box-shadow: 0 0 8px #ffc107aa;
+  }
+  .offline {
+    background-color: #dc3545; /* rot */
+    box-shadow: 0 0 8px #dc3545aa;
+  }
+  footer {
+    margin-top: 2em;
+    font-size: 0.85em;
+    color: #888;
+  }
+</style>
+</head>
+<body>
+  <h1>Blaerr Labs – Statusseite</h1>
 
-    <script>
-      async function checkStatus() {
-        const statusEl = document.getElementById("api-status");
-        try {
-          const res = await fetch("https://codu.blaerr.dev/api/ping", { method: "GET" });
-          if (res.ok) {
-            statusEl.textContent = "✅ Online";
-            statusEl.className = "status online";
-          } else {
-            statusEl.textContent = "⚠️ Fehler";
-            statusEl.className = "status offline";
-          }
-        } catch (err) {
-          statusEl.textContent = "❌ Offline";
-          statusEl.className = "status offline";
+  <!-- Blaerr.dev Hauptwebsite -->
+  <h2>Blaerr.dev (Hauptwebsite)</h2>
+  <div class="service-list">
+    <div class="service">
+      <div class="service-name">Webseite</div>
+      <div id="blaerr-web-status" class="status">⏳ Prüfe...</div>
+    </div>
+    <div class="service">
+      <div class="service-name">API</div>
+      <div id="blaerr-api-status" class="status">⏳ Prüfe...</div>
+    </div>
+  </div>
+
+  <!-- Codu (Dev-Dashboard) -->
+  <h2>Codu (Dev-Dashboard)</h2>
+  <div class="service-list">
+    <div class="service">
+      <div class="service-name">Webseite</div>
+      <div id="codu-web-status" class="status">⏳ Prüfe...</div>
+    </div>
+    <div class="service">
+      <div class="service-name">API</div>
+      <div id="codu-api-status" class="status">⏳ Prüfe...</div>
+    </div>
+  </div>
+
+  <footer>
+    Letzte Aktualisierung: <span id="last-updated">–</span>
+  </footer>
+
+  <script>
+    async function checkService(url, elementId) {
+      const el = document.getElementById(elementId);
+      try {
+        const res = await fetch(url, { method: 'GET', cache: "no-store" });
+        if (res.ok) {
+          el.textContent = "✅ Online";
+          el.className = "status online";
+        } else {
+          el.textContent = "⚠️ Probleme";
+          el.className = "status degraded";
         }
+      } catch {
+        el.textContent = "❌ Offline";
+        el.className = "status offline";
       }
+    }
 
-      checkStatus();
-      setInterval(checkStatus, 30000); // Alle 30 Sekunden prüfen
-    </script>
-  </body>
+    async function checkAll() {
+      await Promise.all([
+        // Blaerr.dev
+        checkService("https://blaerr.dev", "blaerr-web-status"),
+        checkService("https://blaerr.dev/api/ping", "blaerr-api-status"),
+
+        // Codu
+        checkService("https://codu.blaerr.dev", "codu-web-status"),
+        checkService("https://codu.blaerr.dev/api/ping", "codu-api-status"),
+      ]);
+      document.getElementById("last-updated").textContent = new Date().toLocaleString();
+    }
+
+    checkAll();
+    setInterval(checkAll, 30000); // alle 30 Sekunden aktualisieren
+  </script>
+</body>
 </html>
