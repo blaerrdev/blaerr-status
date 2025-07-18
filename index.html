@@ -1,1 +1,163 @@
-huhu
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Status – Codu</title>
+  <style>
+    :root {
+      --green: #22c55e;
+      --yellow: #facc15;
+      --red: #ef4444;
+      --gray: #6b7280;
+      --light: #f3f4f6;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #111827;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin: 0;
+    }
+
+    p.subtitle {
+      color: var(--gray);
+      margin: 0.25rem 0 0;
+    }
+
+    .status-list {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .status-item:first-child {
+      border-top: none;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .green { background: var(--green); }
+    .yellow { background: var(--yellow); }
+    .red { background: var(--red); }
+
+    .incident {
+      background: var(--light);
+      border-left: 4px solid var(--red);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+
+    .incident.resolved {
+      border-left-color: var(--green);
+    }
+
+    .incident h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+    }
+
+    .incident small {
+      color: var(--gray);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      font-size: 0.875rem;
+      color: var(--gray);
+      border-top: 1px solid #e5e7eb;
+    }
+
+    @media (max-width: 600px) {
+      .status-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Codu Status</h1>
+      <p class="subtitle">Real-time updates on system performance.</p>
+    </header>
+
+    <section>
+      <h2>Current Status</h2>
+      <div class="status-list">
+        <div class="status-item">
+          <span>API</span>
+          <span><span class="status-dot green"></span>Operational</span>
+        </div>
+        <div class="status-item">
+          <span>Dashboard</span>
+          <span><span class="status-dot yellow"></span>Degraded</span>
+        </div>
+        <div class="status-item">
+          <span>Auth System</span>
+          <span><span class="status-dot green"></span>Operational</span>
+        </div>
+        <div class="status-item">
+          <span>Docs</span>
+          <span><span class="status-dot red"></span>Outage</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Incident History</h2>
+
+      <div class="incident">
+        <h3>Docs Service Outage <small>– July 18, 2025</small></h3>
+        <p>Major outage impacting documentation delivery. Engineers are investigating.</p>
+      </div>
+
+      <div class="incident resolved">
+        <h3>Dashboard Latency Resolved <small>– July 16, 2025</small></h3>
+        <p>Increased response times observed in the dashboard UI. Fully resolved.</p>
+      </div>
+    </section>
+
+    <footer>
+      &copy; 2025 Codu Labs – All systems monitored.
+    </footer>
+  </div>
+</body>
+</html>
